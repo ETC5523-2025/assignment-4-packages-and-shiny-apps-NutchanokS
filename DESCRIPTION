@@ -1,19 +1,31 @@
 Package: assign4nspack
-Title: What the Package Does (One Line, Title Case)
+Title: Explore High-Frequency Water Quality and Nitrate Relationships
 Version: 0.1.0
 Authors@R: 
     person("Nutchanok", "Saitin", email = "nsai0012@student.monash.edu", role = c("aut", "cre"))
-Description: What the package does (one paragraph).
+Description: 
+    Provides cleaned and curated high-frequency freshwater monitoring data 
+    (nitrate, conductivity, dissolved oxygen and turbidity) derived from NEON sensor products. Includes helper functions 
+    for exploratory analysis and a Shiny app to interactively explore nitrate–water quality relationships across multiple sites. 
 License: MIT + file LICENSE
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.3.3
-Imports: 
-    shiny
 Depends: 
     R (>= 3.5)
-LazyData: true
+Imports: 
+    shiny,
+    ggplot2,
+    dplyr,
+    plotly,
+    tidyr
 Suggests: 
     knitr,
-    rmarkdown
+    rmarkdown,
+    pkgdown,
+    testthat (>= 3.0.0)
 VignetteBuilder: knitr
+URL: https://github.com/ETC5523-2025/assignment-4-packages-and-shiny-apps-NutchanokS,
+    https://etc5523-2025.github.io/assignment-4-packages-and-shiny-apps-NutchanokS/
+BugReports: https://github.com/ETC5523-2025/assignment-4-packages-and-shiny-apps-NutchanokS/issues
+LazyData: true
