@@ -1,17 +1,3 @@
-assign4nspack
-================
-
-- [assign4nspack](#assign4nspack)
-  - [Introduction](#introduction)
-  - [Installation](#installation)
-  - [Datasets Included](#datasets-included)
-  - [Key variables](#key-variables)
-  - [Shiny App](#shiny-app)
-  - [Data Sources](#data-sources)
-  - [Documentation & Website](#documentation--website)
-  - [License](#license)
-  - [Author](#author)
-  - [Acknowledgements](#acknowledgements)
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
