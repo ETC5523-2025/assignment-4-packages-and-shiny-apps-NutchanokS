@@ -32,4 +32,132 @@ if (!have_data) {
 
 ```
 
+## Overview
 
+This vignette documents how the **assign4nspack** datasets were curated from NEON sensor products and shows quick analyses that mirror the questions explored in the Shiny app.
+
+**Goals**
+
+- Describe the data sources and preparation (time window, QC, hourly aggregation).
+- Provide light EDA to understand coverage by site/sensor.
+- Show a compact example of the nitrate–water quality relationship.
+- Point readers to the interactive app for deeper exploration.
+
+## Data sources
+
+We derive hourly datasets from publicly available NEON products:
+
+- **DP1.20288.001** — *Aquatic Instrumentation: Water Quality (WQ)*  
+  variables: conductivity (`cond_uScm`), dissolved oxygen (`do_mgL`), turbidity (`turb_FNU`)
+- **DP1.20033.001** — *Nitrate in Surface Water (NSW)*  
+  variable: nitrate (`nitrate_umolL`)
+
+Data are used here for educational purposes.
+
+## Timeframe, QC, and joins (summary)
+
+- Time window: **2018-01-01 to 2019-12-31**.
+- Quality filtering: keep measurements with NEON quality flag **QF == 0** when available.
+- Aggregation: raw 15-min values → **hourly means** using `lubridate::floor_date`.
+- Join keys: `site`, `sensor` (`S1_upstream`, `S2_downstream`), `date_time` (UTC).
+
+The full preparation steps are implemented in the package’s `data-raw/` scripts.
+
+## Quick data check
+
+```{r glimpse, message=FALSE}
+library(dplyr)
+library(tidyr)
+library(ggplot2)
+library(scales)
+
+# quick structure
+dplyr::glimpse(wq_nitrate)
+```
+
+## Coverage by site and sensor
+
+```{r coverage, message=FALSE}
+coverage <- wq_nitrate |>
+summarise(
+n_hours         = dplyr::n(),
+n_nonNA_nitrate = sum(!is.na(nitrate_umolL)),
+pct_nitrate     = n_nonNA_nitrate / n_hours
+, .by = c(site, sensor)) |>
+arrange(site, sensor)
+
+coverage
+```
+
+A simple bar chart of nitrate availability:
+
+```{r coverage plot, message=FALSE}
+ggplot(coverage, aes(x = site, y = pct_nitrate, fill = sensor)) +
+geom_col(position = position_dodge(width = 0.7)) +
+scale_y_continuous(labels = percent) +
+labs(title = "Share of hourly timestamps with nitrate present",
+x = "Site", y = "Coverage", fill = "Sensor") +
+theme_minimal()
+```
+
+## Time range check
+
+```{r time rage, message=FALSE}
+wq_nitrate |>
+summarise(
+start = min(date_time),
+end   = max(date_time),
+.by   = c(site, sensor)
+) |>
+arrange(site, sensor)
+```
+
+**Nitrate–water quality relationship**
+
+We illustrate one relationship that the app explores interactively: **nitrate vs dissolved oxygen.**
+
+Downstream sensors (`S2_downstream`) usually have the richest nitrate coverage.
+
+```{r relationship plot, message=FALSE}
+df_rel <- wq_nitrate |>
+filter(sensor == "S2_downstream") |>
+select(site, sensor, date_time, do_mgL, nitrate_umolL) |>
+drop_na(do_mgL, nitrate_umolL)
+
+ggplot(df_rel, aes(x = do_mgL, y = nitrate_umolL, colour = site)) +
+geom_point(alpha = 0.5, size = 1) +
+geom_smooth(method = "lm", se = FALSE) +
+labs(x = "Dissolved oxygen (mg/L)", y = "Nitrate (\u00B5mol/L)",
+title = "Nitrate vs dissolved oxygen (S2_downstream)") +
+theme_minimal()
+```
+
+Correlation (pooled across sites at `S2_downstream`):
+
+```{r correlation, message=FALSE}
+ct <- suppressWarnings(cor.test(df_rel$do_mgL, df_rel$nitrate_umolL))
+data.frame(
+r = unname(ct$estimate),
+p_value = ct$p.value
+)
+```
+
+*(Interpretation example: a small positive/negative r indicates a weak linear association; see the app for site-specific views and LOESS fits.)*
+
+## Launch the interactive app
+
+For guided exploration (time trends, site comparisons, faceting, trend fits), launch:
+
+```{r, echo=TRUE, eval=FALSE}
+# Launch the interactive dashboard
+assign4nspack::run_app()
+```
+
+## Reproducibility
+
+- Package version: `r utils::packageVersion("assign4nspack")`  
+- R version: `r R.version.string`
+
+```{r session-info, echo=FALSE}
+sessionInfo()
+```
