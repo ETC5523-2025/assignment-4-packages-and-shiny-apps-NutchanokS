@@ -2,15 +2,13 @@
 % Please edit documentation in R/run_app.R
 \name{run_app}
 \alias{run_app}
-\title{Launch the Shiny app bundled with assign4nspack}
+\title{Launch the Shiny app}
 \usage{
 run_app()
 }
-\value{
-Invisibly returns the result of \code{\link[shiny:runApp]{shiny::runApp()}}.
-}
 \description{
-Opens the Shiny app located in \verb{inst/app/} inside the installed package.
+This function launches the interactive explorer bundled with the package.
+It uses the packaged datasets (no reading from disk).
 }
 \examples{
 \dontrun{
