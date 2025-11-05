@@ -112,6 +112,46 @@
 </tr>
 </tbody>
 </table>
+</div>
+<div class="section level2">
+<h2 id="neon-sites-included">NEON Sites Included<a class="anchor" aria-label="anchor" href="#neon-sites-included"></a>
+</h2>
+<p>This package includes three NEON freshwater stream sites used in <em>Kermorvant et al. (2023)</em>:</p>
+<table class="table">
+<colgroup>
+<col width="25%">
+<col width="25%">
+<col width="25%">
+<col width="25%">
+</colgroup>
+<thead><tr class="header">
+<th>Site code</th>
+<th>Full name</th>
+<th>Location</th>
+<th>Description</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td><strong>ARIK</strong></td>
+<td>Arikaree River</td>
+<td>Colorado, USA</td>
+<td>A semi-arid stream draining short-grass prairie and agricultural areas. Shows strong diel temperature and conductivity cycles and low nitrate variability.</td>
+</tr>
+<tr class="even">
+<td><strong>CARI</strong></td>
+<td>Caribou Creek</td>
+<td>Alaska, USA</td>
+<td>A cold sub-arctic catchment with limited human influence. Low conductivity and nitrate due to pristine tundra landscape.</td>
+</tr>
+<tr class="odd">
+<td><strong>LEWI</strong></td>
+<td>Lewis Run</td>
+<td>Pennsylvania, USA</td>
+<td>A temperate, urban–agricultural watershed with elevated nitrate and conductivity from runoff and land use.</td>
+</tr>
+</tbody>
+</table>
+<p>These sites provide contrasting hydrological and biogeochemical regimes — ideal for exploring how water-quality variables relate to nitrate concentrations.</p>
 <div class="section level3">
 <h3 id="data-filtering-and-coverage">Data filtering and coverage<a class="anchor" aria-label="anchor" href="#data-filtering-and-coverage"></a>
 </h3>
@@ -133,13 +173,13 @@ the study period described in <em>Kermorvant et al. (2023):</em><br>
 <span><span class="fu"><a href="https://pillar.r-lib.org/reference/glimpse.html" class="external-link">glimpse</a></span><span class="op">(</span><span class="va">wq_nitrate</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Rows: 62,139</span></span>
 <span><span class="co">#&gt; Columns: 7</span></span>
-<span><span class="co">#&gt; $ site          &lt;chr&gt; "ARIK", "ARIK", "ARIK", "ARIK", "ARIK", "ARIK", "ARIK", …</span></span>
-<span><span class="co">#&gt; $ sensor        &lt;chr&gt; "S1_upstream", "S1_upstream", "S1_upstream", "S1_upstrea…</span></span>
-<span><span class="co">#&gt; $ date_time     &lt;dttm&gt; 2019-01-03 16:00:00, 2019-01-03 17:00:00, 2019-01-03 18…</span></span>
-<span><span class="co">#&gt; $ cond_uScm     &lt;dbl&gt; 542.3400, 540.3288, 537.1060, 535.5428, 535.4665, 536.33…</span></span>
-<span><span class="co">#&gt; $ do_mgL        &lt;dbl&gt; 8.442500, 8.558167, 8.781667, 8.959333, 9.091833, 9.1450…</span></span>
-<span><span class="co">#&gt; $ turb_FNU      &lt;dbl&gt; 0.8062500, 0.7151667, 0.6653333, 0.6310000, 0.6008333, 0…</span></span>
-<span><span class="co">#&gt; $ nitrate_umolL &lt;dbl&gt; NaN, NaN, NaN, NaN, NaN, NaN, NaN, NaN, NaN, NaN, NaN, N…</span></span></code></pre></div>
+<span><span class="co">#&gt; $ site          &lt;chr&gt; "ARIK", "ARIK", "ARIK", "ARIK", "ARIK", "ARIK", "ARIK", "ARIK", "ARIK",~</span></span>
+<span><span class="co">#&gt; $ sensor        &lt;chr&gt; "S1_upstream", "S1_upstream", "S1_upstream", "S1_upstream", "S1_upstrea~</span></span>
+<span><span class="co">#&gt; $ date_time     &lt;dttm&gt; 2019-01-03 16:00:00, 2019-01-03 17:00:00, 2019-01-03 18:00:00, 2019-01~</span></span>
+<span><span class="co">#&gt; $ cond_uScm     &lt;dbl&gt; 542.3400, 540.3288, 537.1060, 535.5428, 535.4665, 536.3322, 537.7798, 5~</span></span>
+<span><span class="co">#&gt; $ do_mgL        &lt;dbl&gt; 8.442500, 8.558167, 8.781667, 8.959333, 9.091833, 9.145000, 9.124500, 9~</span></span>
+<span><span class="co">#&gt; $ turb_FNU      &lt;dbl&gt; 0.8062500, 0.7151667, 0.6653333, 0.6310000, 0.6008333, 0.5710000, 0.554~</span></span>
+<span><span class="co">#&gt; $ nitrate_umolL &lt;dbl&gt; NaN, NaN, NaN, NaN, NaN, NaN, NaN, NaN, NaN, NaN, NaN, NaN, NaN, NaN, N~</span></span></code></pre></div>
 </div>
 </div>
 <div class="section level2">
@@ -196,8 +236,18 @@ the study period described in <em>Kermorvant et al. (2023):</em><br>
 </tr>
 </tbody>
 </table>
-<p>—screenshot app</p>
 </div>
+</div>
+<div class="section level2">
+<h2 id="example-shiny-app-screenshots">Example Shiny App Screenshots<a class="anchor" aria-label="anchor" href="#example-shiny-app-screenshots"></a>
+</h2>
+<p>The following examples show key tabs from the <strong>NEON Freshwater Quality Explorer</strong> included in this package.</p>
+<p><strong>1. Time Trend:</strong><br>
+Changes in water-quality variables (e.g., conductivity) over time for all sites. <img src="reference/figures/app_timetrend.png" alt="Time Trend Tab"></p>
+<p><strong>2. Boxplot by Site:</strong><br>
+Distribution of conductivity across NEON sites. <img src="reference/figures/app_boxplot.png" alt="Boxplot Tab"></p>
+<p><strong>3. Nitrate Relationship:</strong><br>
+Nitrate vs. conductivity with both <strong>Linear (orange)</strong> and <strong>LOESS (black dashed)</strong> fits. <img src="reference/figures/app_relation.png" alt="Nitrate Relationship Tab"></p>
 </div>
 <div class="section level2">
 <h2 id="data-sources">Data Sources<a class="anchor" aria-label="anchor" href="#data-sources"></a>
@@ -239,6 +289,8 @@ the study period described in <em>Kermorvant et al. (2023):</em><br>
 <li>Original data source: <em>National Ecological Observatory Network (NEON)</em>
 </li>
 </ul>
+<p>NEON (National Ecological Observatory Network). Water quality (DP1.20288.001), RELEASE-2025. <a href="https://doi.org/10.48443/03mj-t174" class="external-link uri">https://doi.org/10.48443/03mj-t174</a>. Dataset accessed from <a href="https://data.neonscience.org/data-products/DP1.20288.001/RELEASE-2025" class="external-link uri">https://data.neonscience.org/data-products/DP1.20288.001/RELEASE-2025</a> on October 28, 2025.</p>
+<p>NEON (National Ecological Observatory Network). Nitrate in surface water (DP1.20033.001), RELEASE-2025. <a href="https://doi.org/10.48443/wwa3-p420" class="external-link uri">https://doi.org/10.48443/wwa3-p420</a>. Dataset accessed from <a href="https://data.neonscience.org/data-products/DP1.20033.001/RELEASE-2025" class="external-link uri">https://data.neonscience.org/data-products/DP1.20033.001/RELEASE-2025</a> on October 28, 2025.</p>
 </div>
 </div>
   </main><aside class="col-md-3"><div class="links">
