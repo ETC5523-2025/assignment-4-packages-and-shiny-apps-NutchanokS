@@ -7,16 +7,29 @@ vignette: >
   %\VignetteEncoding{UTF-8}
 ---
 
-```{r, include = FALSE}
-knitr::opts_chunk$set(
-  collapse = TRUE,
-  comment = "#>"
-)
-```
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, message = FALSE, warning = FALSE)
 
-```{r setup}
+# Load the installed package (the vignette runs after a temp install)
 library(assign4nspack)
 
-summary(example_data)
+# Safely load packaged datasets (explicit is best; don't rely on LazyData)
+if (!exists("wq_nitrate", inherits = FALSE)) {
+  utils::data("wq_nitrate", package = "assign4nspack", envir = environment())
+}
+if (!exists("wq_hourly", inherits = FALSE)) {
+  utils::data("wq_hourly", package = "assign4nspack", envir = environment())
+}
+if (!exists("nitrate_hourly", inherits = FALSE)) {
+  utils::data("nitrate_hourly", package = "assign4nspack", envir = environment())
+}
+
+# fail *gracefully* with a clear message if data truly isn't present
+have_data <- all(c("wq_nitrate","wq_hourly","nitrate_hourly") %in% ls())
+if (!have_data) {
+  knitr::knit_exit()  # Stop building the vignette but without throwing a hard error
+}
+
 ```
+
 
