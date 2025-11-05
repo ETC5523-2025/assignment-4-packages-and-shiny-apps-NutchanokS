@@ -1,0 +1,25 @@
+/* --- Custom Shiny CSS for assign4nspack --- */
+
+body {
+  background-color: #f9fafb;
+  font-family: 'Inter', sans-serif;
+}
+
+.navbar-default {
+  background-color: #1F77B4;
+  border-color: #1F77B4;
+}
+
+.control-label {
+  font-weight: 600;
+  color: #111827;
+}
+
+.form-control {
+  border-radius: 10px;
+}
+
+.panel {
+  border-radius: 10px;
+  border-color: #ddd;
+}
