@@ -52,6 +52,21 @@ data:
 | **`nitrate_hourly`** | Hourly nitrate concentrations (µmol/L) from NEON **DP1.20033.001** |
 | **`wq_nitrate`** | Combined dataset aligning water-quality and nitrate observations by site, sensor, and timestamp |
 
+## NEON Sites Included
+
+This package includes three NEON freshwater stream sites used in
+*Kermorvant et al. (2023)*:
+
+| Site code | Full name | Location | Description |
+|----|----|----|----|
+| **ARIK** | Arikaree River | Colorado, USA | A semi-arid stream draining short-grass prairie and agricultural areas. Shows strong diel temperature and conductivity cycles and low nitrate variability. |
+| **CARI** | Caribou Creek | Alaska, USA | A cold sub-arctic catchment with limited human influence. Low conductivity and nitrate due to pristine tundra landscape. |
+| **LEWI** | Lewis Run | Pennsylvania, USA | A temperate, urban–agricultural watershed with elevated nitrate and conductivity from runoff and land use. |
+
+These sites provide contrasting hydrological and biogeochemical regimes
+— ideal for exploring how water-quality variables relate to nitrate
+concentrations.
+
 ### Data filtering and coverage
 
 Data were sourced from NEON freshwater sites covering the period
@@ -80,13 +95,13 @@ data("wq_nitrate", package = "assign4nspack")
 glimpse(wq_nitrate)
 #> Rows: 62,139
 #> Columns: 7
-#> $ site          <chr> "ARIK", "ARIK", "ARIK", "ARIK", "ARIK", "ARIK", "ARIK", …
-#> $ sensor        <chr> "S1_upstream", "S1_upstream", "S1_upstream", "S1_upstrea…
-#> $ date_time     <dttm> 2019-01-03 16:00:00, 2019-01-03 17:00:00, 2019-01-03 18…
-#> $ cond_uScm     <dbl> 542.3400, 540.3288, 537.1060, 535.5428, 535.4665, 536.33…
-#> $ do_mgL        <dbl> 8.442500, 8.558167, 8.781667, 8.959333, 9.091833, 9.1450…
-#> $ turb_FNU      <dbl> 0.8062500, 0.7151667, 0.6653333, 0.6310000, 0.6008333, 0…
-#> $ nitrate_umolL <dbl> NaN, NaN, NaN, NaN, NaN, NaN, NaN, NaN, NaN, NaN, NaN, N…
+#> $ site          <chr> "ARIK", "ARIK", "ARIK", "ARIK", "ARIK", "ARIK", "ARIK", "ARIK", "ARIK",~
+#> $ sensor        <chr> "S1_upstream", "S1_upstream", "S1_upstream", "S1_upstream", "S1_upstrea~
+#> $ date_time     <dttm> 2019-01-03 16:00:00, 2019-01-03 17:00:00, 2019-01-03 18:00:00, 2019-01~
+#> $ cond_uScm     <dbl> 542.3400, 540.3288, 537.1060, 535.5428, 535.4665, 536.3322, 537.7798, 5~
+#> $ do_mgL        <dbl> 8.442500, 8.558167, 8.781667, 8.959333, 9.091833, 9.145000, 9.124500, 9~
+#> $ turb_FNU      <dbl> 0.8062500, 0.7151667, 0.6653333, 0.6310000, 0.6008333, 0.5710000, 0.554~
+#> $ nitrate_umolL <dbl> NaN, NaN, NaN, NaN, NaN, NaN, NaN, NaN, NaN, NaN, NaN, NaN, NaN, NaN, N~
 ```
 
 ## Key variables
@@ -118,7 +133,23 @@ assign4nspack::run_app()
 | **Boxplot by Site** | Compare distributions across sites |
 | **Nitrate Relationship** | Explore nitrate vs. water-quality variables with optional LM/LOESS fits, correlation, and site facets |
 
-—screenshot app
+## Example Shiny App Screenshots
+
+The following examples show key tabs from the **NEON Freshwater Quality
+Explorer** included in this package.
+
+**1. Time Trend:**  
+Changes in water-quality variables (e.g., conductivity) over time for
+all sites. ![Time Trend Tab](man/figures/app_timetrend.png)
+
+**2. Boxplot by Site:**  
+Distribution of conductivity across NEON sites. ![Boxplot
+Tab](man/figures/app_boxplot.png)
+
+**3. Nitrate Relationship:**  
+Nitrate vs. conductivity with both **Linear (orange)** and **LOESS
+(black dashed)** fits. ![Nitrate Relationship
+Tab](man/figures/app_relation.png)
 
 ## Data Sources
 
@@ -152,3 +183,15 @@ Nutchanok Saitin (Author & Maintainer)
 - Data wrangling: `dplyr`, `tidyr`, `lubridate`, `purrr`
 - Visualisation: `ggplot2`, `plotly`, `shiny`, `bslib`
 - Original data source: *National Ecological Observatory Network (NEON)*
+
+NEON (National Ecological Observatory Network). Water quality
+(DP1.20288.001), RELEASE-2025. <https://doi.org/10.48443/03mj-t174>.
+Dataset accessed from
+<https://data.neonscience.org/data-products/DP1.20288.001/RELEASE-2025>
+on October 28, 2025.
+
+NEON (National Ecological Observatory Network). Nitrate in surface water
+(DP1.20033.001), RELEASE-2025. <https://doi.org/10.48443/wwa3-p420>.
+Dataset accessed from
+<https://data.neonscience.org/data-products/DP1.20033.001/RELEASE-2025>
+on October 28, 2025.
