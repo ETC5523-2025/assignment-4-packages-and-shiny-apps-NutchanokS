@@ -1,5 +1,5 @@
 ---
-title: "analysis"
+title: "Analysis and Interactive Exploration of NEON Freshwater Data"
 output: rmarkdown::html_vignette
 vignette: >
   %\VignetteIndexEntry{analysis}
@@ -10,60 +10,63 @@ vignette: >
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE, message = FALSE, warning = FALSE)
 
-# Load the installed package (the vignette runs after a temp install)
+# Load installed package
 library(assign4nspack)
 
-# Safely load packaged datasets (explicit is best; don't rely on LazyData)
-if (!exists("wq_nitrate", inherits = FALSE)) {
+# Safely load packaged datasets
+if (!exists("wq_nitrate", inherits = FALSE))
   utils::data("wq_nitrate", package = "assign4nspack", envir = environment())
-}
-if (!exists("wq_hourly", inherits = FALSE)) {
+if (!exists("wq_hourly", inherits = FALSE))
   utils::data("wq_hourly", package = "assign4nspack", envir = environment())
-}
-if (!exists("nitrate_hourly", inherits = FALSE)) {
+if (!exists("nitrate_hourly", inherits = FALSE))
   utils::data("nitrate_hourly", package = "assign4nspack", envir = environment())
-}
 
-# fail *gracefully* with a clear message if data truly isn't present
+# Gracefully exit if data missing
 have_data <- all(c("wq_nitrate","wq_hourly","nitrate_hourly") %in% ls())
-if (!have_data) {
-  knitr::knit_exit()  # Stop building the vignette but without throwing a hard error
-}
-
+if (!have_data) knitr::knit_exit()
 ```
 
 ## Overview
 
-This vignette documents how the **assign4nspack** datasets were curated from NEON sensor products and shows quick analyses that mirror the questions explored in the Shiny app.
+This vignette demonstrates how **assign4nspack** curates and visualises high-frequency freshwater sensor data from the **National Ecological Observatory Network (NEON)**.
+It summarises dataset preparation, coverage checks, and basic relationships that the package’s interactive Shiny app explores in more detail.
 
 **Goals**
 
-- Describe the data sources and preparation (time window, QC, hourly aggregation).
-- Provide light EDA to understand coverage by site/sensor.
-- Show a compact example of the nitrate–water quality relationship.
-- Point readers to the interactive app for deeper exploration.
+- Describe data sources, time window, and quality-control (QC) procedures.
+- Summarise site-specific coverage by sensor.
+- Illustrate an example nitrate–water-quality relationship.
+- Explain the Shiny dashboard tabs for interactive analysis.
 
 ## Data sources
 
-We derive hourly datasets from publicly available NEON products:
+Hourly datasets were derived from publicly available NEON products:
 
 - **DP1.20288.001** — *Aquatic Instrumentation: Water Quality (WQ)*  
   variables: conductivity (`cond_uScm`), dissolved oxygen (`do_mgL`), turbidity (`turb_FNU`)
 - **DP1.20033.001** — *Nitrate in Surface Water (NSW)*  
   variable: nitrate (`nitrate_umolL`)
 
-Data are used here for educational purposes.
+These data are used solely for educational purposes in ETC5523 – Communicating with Data.
 
-## Timeframe, QC, and joins (summary)
+## NEON stream sites in this package
 
-- Time window: **2018-01-01 to 2019-12-31**.
-- Quality filtering: keep measurements with NEON quality flag **QF == 0** when available.
-- Aggregation: raw 15-min values → **hourly means** using `lubridate::floor_date`.
-- Join keys: `site`, `sensor` (`S1_upstream`, `S2_downstream`), `date_time` (UTC).
+| Site code | Full name | Location (USA) | Description |
+|------------|------------|-----------|--------------|
+| **ARIK** | Arikaree River | Colorado | Semi-arid prairie and cropland catchment with strong diel conductivity cycles. |
+| **CARI** | Caribou Creek | Alaska | Sub-arctic, minimally disturbed watershed with low conductivity and nitrate.|
+| **LEWI** | Lewis Run | Pennsylvania | Temperate urban–agricultural catchment showing high nitrate and conductivity from runoff. |
 
-The full preparation steps are implemented in the package’s `data-raw/` scripts.
+## Data processing summary
 
-## Quick data check
+- **Period:** 1 January 2018 – 31 December 2019
+- **QC:** retain only records with NEON quality flag `QF == 0`
+- **Aggregation:** 15-minute observations averaged to hourly means (`lubridate::floor_date`)
+- **Join keys:** `site`, `sensor` (`S1_upstream`, `S2_downstream`), `date_time` (UTC)
+
+Data preparation scripts are available in the package’s `data-raw/` folder.
+
+## Quick structure check
 
 ```{r glimpse, message=FALSE}
 library(dplyr)
@@ -100,7 +103,7 @@ x = "Site", y = "Coverage", fill = "Sensor") +
 theme_minimal()
 ```
 
-## Time range check
+## Time range per site/sensor
 
 ```{r time rage, message=FALSE}
 wq_nitrate |>
@@ -112,11 +115,11 @@ end   = max(date_time),
 arrange(site, sensor)
 ```
 
-**Nitrate–water quality relationship**
+## Example relationship: Nitrate vs. Dissolved Oxygen**
 
-We illustrate one relationship that the app explores interactively: **nitrate vs dissolved oxygen.**
+Downstream sensors (`S2_downstream`) provide the richest nitrate coverage.
 
-Downstream sensors (`S2_downstream`) usually have the richest nitrate coverage.
+The plot below shows a site-coloured scatter of nitrate against dissolved oxygen with linear fits.
 
 ```{r relationship plot, message=FALSE}
 df_rel <- wq_nitrate |>
@@ -127,31 +130,46 @@ drop_na(do_mgL, nitrate_umolL)
 ggplot(df_rel, aes(x = do_mgL, y = nitrate_umolL, colour = site)) +
 geom_point(alpha = 0.5, size = 1) +
 geom_smooth(method = "lm", se = FALSE) +
-labs(x = "Dissolved oxygen (mg/L)", y = "Nitrate (\u00B5mol/L)",
-title = "Nitrate vs dissolved oxygen (S2_downstream)") +
+labs(
+x = "Dissolved oxygen (mg/L)",
+y = "Nitrate (\u00B5mol/L)",
+title = "Nitrate vs Dissolved Oxygen (S2_downstream)"
+) +
 theme_minimal()
 ```
 
-Correlation (pooled across sites at `S2_downstream`):
+Correlation across all sites:
 
 ```{r correlation, message=FALSE}
 ct <- suppressWarnings(cor.test(df_rel$do_mgL, df_rel$nitrate_umolL))
-data.frame(
-r = unname(ct$estimate),
-p_value = ct$p.value
-)
+data.frame(r = unname(ct$estimate), p_value = ct$p.value)
 ```
 
-*(Interpretation example: a small positive/negative r indicates a weak linear association; see the app for site-specific views and LOESS fits.)*
+*(Interpretation: small |r| values indicate weak linear association; nonlinear effects can be explored via LOESS in the app.)*
 
-## Launch the interactive app
+## Shiny dashboard: tabs at a glance
 
-For guided exploration (time trends, site comparisons, faceting, trend fits), launch:
+The package provides an interactive NEON Freshwater Quality Explorer.
+
+Launch it with:
 
 ```{r, echo=TRUE, eval=FALSE}
 # Launch the interactive dashboard
 assign4nspack::run_app()
 ```
+
+| Tab | Purpose |
+|----------|-------------|
+| **About the Data** | Describes NEON data products, sensor layout, and key variables.|
+| **Time Trend** | Displays temporal changes in conductivity, oxygen, turbidity, or nitrate, highlighting diurnal and seasonal cycles. |
+| **Boxplot by Site** | Compares variable distributions across sites and sensors. |
+| **Nitrate Relationship** | Explores nitrate vs. water-quality variables with optional Linear (orange) and LOESS (black dashed) fits; can facet by site and hide extremes. |
+
+## Data citation
+
+NEON (National Ecological Observatory Network). Water quality (DP1.20288.001), RELEASE-2025. <https://doi.org/10.48443/03mj-t174>. Dataset accessed from <https://data.neonscience.org/data-products/DP1.20288.001/RELEASE-2025> on October 28, 2025.
+
+NEON (National Ecological Observatory Network). Nitrate in surface water (DP1.20033.001), RELEASE-2025. <https://doi.org/10.48443/wwa3-p420>. Dataset accessed from <https://data.neonscience.org/data-products/DP1.20033.001/RELEASE-2025> on October 28, 2025.
 
 ## Reproducibility
 
