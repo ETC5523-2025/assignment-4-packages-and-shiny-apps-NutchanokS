@@ -1,3 +1,17 @@
+assign4nspack
+================
+
+- [assign4nspack](#assign4nspack)
+  - [Introduction](#introduction)
+  - [Installation](#installation)
+  - [Datasets Included](#datasets-included)
+  - [Key variables](#key-variables)
+  - [Shiny App](#shiny-app)
+  - [Data Sources](#data-sources)
+  - [Documentation & Website](#documentation--website)
+  - [License](#license)
+  - [Author](#author)
+  - [Acknowledgements](#acknowledgements)
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
@@ -7,47 +21,139 @@
 
 <!-- badges: end -->
 
-The goal of assign4nspack is to …
+## Introduction
+
+**assign4nspack** is a teaching-focused R package for exploring
+**high-frequency freshwater water-quality and nitrate relationships**
+using data derived from the **National Ecological Observatory Network
+(NEON)**.
+
+It provides:
+
+- Cleaned, curated hourly datasets (`wq_hourly`, `nitrate_hourly`,
+  `wq_nitrate`)
+- Data-processing scripts in `data-raw/`
+- An interactive **Shiny app** to visualise water-quality and nitrate
+  trends across sites  
+- Full documentation and reproducible examples built with **roxygen2**
+  and **pkgdown**
+
+------------------------------------------------------------------------
 
 ## Installation
 
 You can install the development version of assign4nspack from
-[GitHub](https://github.com/) with:
+[GitHub](https://github.com/ETC5523-2025/assignment-4-packages-and-shiny-apps-NutchanokS)
+with:
 
 ``` r
 # install.packages("pak")
 pak::pak("ETC5523-2025/assignment-4-packages-and-shiny-apps-NutchanokS")
 ```
 
-## Example
-
-This is a basic example which shows you how to solve a common problem:
+Then load the package:
 
 ``` r
 library(assign4nspack)
-## basic example code
 ```
 
-What is special about using `README.Rmd` instead of just `README.md`?
-You can include R chunks like so:
+## Datasets Included
+
+The package ships with three tidy datasets prepared from NEON sensor
+data:
+
+| Dataset | Description |
+|----|----|
+| **`wq_hourly`** | Hourly water-quality data (conductivity, dissolved oxygen, turbidity) from NEON **DP1.20288.001** |
+| **`nitrate_hourly`** | Hourly nitrate concentrations (µmol/L) from NEON **DP1.20033.001** |
+| **`wq_nitrate`** | Combined dataset aligning water-quality and nitrate observations by site, sensor, and timestamp |
+
+### Data filtering and coverage
+
+Data were sourced from NEON freshwater sites covering the period
+**January 2018 to December 2019**.  
+For each site, both upstream (`S1_upstream`) and downstream
+(`S2_downstream`) sensors were used when available.  
+Raw 15-minute observations from NEON products DP1.20288.001 (Water
+Quality) and DP1.20033.001 (Nitrate)  
+were aggregated to **hourly means**, quality-filtered (`QF == 0`), and
+merged by `site`, `sensor`, and `date_time`.
+
+The final datasets include hourly records for **multiple NEON stream
+sites** consistent with  
+the study period described in *Kermorvant et al. (2023):*  
+\> *“Understanding links between water-quality variables and nitrate
+concentration in freshwater streams using high-frequency sensor data.”*
+
+This ensures the datasets reflect comparable temporal coverage and data
+quality to the published analysis.
+
+### Example preview
 
 ``` r
-summary(cars)
-#>      speed           dist       
-#>  Min.   : 4.0   Min.   :  2.00  
-#>  1st Qu.:12.0   1st Qu.: 26.00  
-#>  Median :15.0   Median : 36.00  
-#>  Mean   :15.4   Mean   : 42.98  
-#>  3rd Qu.:19.0   3rd Qu.: 56.00  
-#>  Max.   :25.0   Max.   :120.00
+library(assign4nspack)
 ```
 
-You’ll still need to render `README.Rmd` regularly, to keep `README.md`
-up-to-date. `devtools::build_readme()` is handy for this.
+## Key variables
 
-You can also embed plots, for example:
+- `site` — 4-letter NEON site identifier (e.g., ARIK, LEWI)
+- `sensor` — sensor position (S1_upstream, S2_downstream)
+- `date_time` — hourly timestamp (UTC)
+- `cond_uScm`, `do_mgL`, `turb_FNU` — water-quality variables
+- `nitrate_umolL` — nitrate concentration (µmol/L)
 
-<img src="man/figures/README-pressure-1.png" width="100%" />
+## Shiny App
 
-In that case, don’t forget to commit and push the resulting figure
-files, so they display on GitHub and CRAN.
+The package includes an interactive Shiny dashboard to explore how
+nitrate concentrations relate to water-quality measures across NEON
+sites.
+
+Launch it with:
+
+``` r
+assign4nspack::run_app()
+```
+
+### App overview
+
+| Tab | Purpose |
+|----|----|
+| **About the Data** | Explains NEON products, variable meanings, and interpretation guidance |
+| **Time Trend** | Line plots showing changes in conductivity, oxygen, turbidity, or nitrate over time |
+| **Boxplot by Site** | Compare distributions across sites |
+| **Nitrate Relationship** | Explore nitrate vs. water-quality variables with optional LM/LOESS fits, correlation, and site facets |
+
+—screenshot app
+
+## Data Sources
+
+All datasets are derived from publicly available NEON sensor products:
+
+- **DP1.20288.001** — Aquatic Instrumentation: Water Quality (WQ)
+- **DP1.20033.001** — Aquatic Instrumentation: Nitrate in Surface Water
+  (NSW)
+
+Data were aggregated to hourly resolution, quality-checked, and merged
+by site and sensor. Used here solely for educational purposes in ETC5523
+— Communicating with Data.
+
+## Documentation & Website
+
+**Package site:**
+<https://etc5523-2025.github.io/assignment-4-packages-and-shiny-apps-NutchanokS/>
+
+## License
+
+This package is released under the **MIT License.** See the included
+`LICENSE` file for details.
+
+## Author
+
+Nutchanok Saitin (Author & Maintainer)
+
+## Acknowledgements
+
+- Package infrastructure: `usethis`, `devtools`, `roxygen2`, `pkgdown`
+- Data wrangling: `dplyr`, `tidyr`, `lubridate`, `purrr`
+- Visualisation: `ggplot2`, `plotly`, `shiny`, `bslib`
+- Original data source: *National Ecological Observatory Network (NEON)*
