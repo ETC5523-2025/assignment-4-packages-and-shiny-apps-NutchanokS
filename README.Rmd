@@ -77,12 +77,7 @@ This ensures the datasets reflect comparable temporal coverage and data quality 
 
 ```{r example-data, message=FALSE}
 library(dplyr)
-
-# Load the dataset from the installed package into the knit session
-if (!exists("wq_nitrate")) {
-  data("wq_nitrate", package = "assign4nspack")
-}
-
+data("wq_nitrate", package = "assign4nspack")
 glimpse(wq_nitrate)
 ```
 

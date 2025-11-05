@@ -92,12 +92,7 @@ quality to the published analysis.
 
 ``` r
 library(dplyr)
-
-# Load the dataset from the installed package into the knit session
-if (!exists("wq_nitrate")) {
-  data("wq_nitrate", package = "assign4nspack")
-}
-
+data("wq_nitrate", package = "assign4nspack")
 glimpse(wq_nitrate)
 #> Rows: 62,139
 #> Columns: 7
