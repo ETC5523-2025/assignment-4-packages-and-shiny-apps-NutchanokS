@@ -91,7 +91,23 @@ quality to the published analysis.
 ### Example preview
 
 ``` r
-library(assign4nspack)
+library(dplyr)
+
+# Load the dataset from the installed package into the knit session
+if (!exists("wq_nitrate")) {
+  data("wq_nitrate", package = "assign4nspack")
+}
+
+glimpse(wq_nitrate)
+#> Rows: 62,139
+#> Columns: 7
+#> $ site          <chr> "ARIK", "ARIK", "ARIK", "ARIK", "ARIK", "ARIK", "ARIK", …
+#> $ sensor        <chr> "S1_upstream", "S1_upstream", "S1_upstream", "S1_upstrea…
+#> $ date_time     <dttm> 2019-01-03 16:00:00, 2019-01-03 17:00:00, 2019-01-03 18…
+#> $ cond_uScm     <dbl> 542.3400, 540.3288, 537.1060, 535.5428, 535.4665, 536.33…
+#> $ do_mgL        <dbl> 8.442500, 8.558167, 8.781667, 8.959333, 9.091833, 9.1450…
+#> $ turb_FNU      <dbl> 0.8062500, 0.7151667, 0.6653333, 0.6310000, 0.6008333, 0…
+#> $ nitrate_umolL <dbl> NaN, NaN, NaN, NaN, NaN, NaN, NaN, NaN, NaN, NaN, NaN, N…
 ```
 
 ## Key variables
