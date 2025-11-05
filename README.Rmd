@@ -29,8 +29,6 @@ It provides:
 - An interactive **Shiny app** to visualise water-quality and nitrate trends across sites  
 - Full documentation and reproducible examples built with **roxygen2** and **pkgdown**
 
----
-
 ## Installation
 
 You can install the development version of assign4nspack from [GitHub](https://github.com/ETC5523-2025/assignment-4-packages-and-shiny-apps-NutchanokS) with:

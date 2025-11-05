@@ -24,8 +24,6 @@ It provides:
 - Full documentation and reproducible examples built with **roxygen2**
   and **pkgdown**
 
-------------------------------------------------------------------------
-
 ## Installation
 
 You can install the development version of assign4nspack from
